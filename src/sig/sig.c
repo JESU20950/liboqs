@@ -10,7 +10,7 @@
 #endif
 
 #include <oqs/oqs.h>
-
+#include <stdio.h>
 OQS_API const char *OQS_SIG_alg_identifier(size_t i) {
 	// EDIT-WHEN-ADDING-SIG
 	const char *a[OQS_SIG_algs_length] = {
@@ -864,15 +864,28 @@ OQS_API OQS_SIG *OQS_SIG_new(const char *method_name) {
 }
 
 OQS_API OQS_STATUS OQS_SIG_keypair(const OQS_SIG *sig, uint8_t *public_key, uint8_t *secret_key) {
-	if (sig == NULL || sig->keypair(public_key, secret_key) != OQS_SUCCESS) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = sig->keypair(public_key, secret_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	if (sig == NULL || status != OQS_SUCCESS) {
 		return OQS_ERROR;
 	} else {
 		return OQS_SUCCESS;
 	}
+	
 }
 
 OQS_API OQS_STATUS OQS_SIG_sign(const OQS_SIG *sig, uint8_t *signature, size_t *signature_len, const uint8_t *message, size_t message_len, const uint8_t *secret_key) {
-	if (sig == NULL || sig->sign(signature, signature_len, message, message_len, secret_key) != OQS_SUCCESS) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = sig->sign(signature, signature_len, message, message_len, secret_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	if (sig == NULL || status != OQS_SUCCESS) {
 		return OQS_ERROR;
 	} else {
 		return OQS_SUCCESS;
@@ -880,11 +893,18 @@ OQS_API OQS_STATUS OQS_SIG_sign(const OQS_SIG *sig, uint8_t *signature, size_t *
 }
 
 OQS_API OQS_STATUS OQS_SIG_verify(const OQS_SIG *sig, const uint8_t *message, size_t message_len, const uint8_t *signature, size_t signature_len, const uint8_t *public_key) {
-	if (sig == NULL || sig->verify(message, message_len, signature, signature_len, public_key) != OQS_SUCCESS) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = sig->verify(message, message_len, signature, signature_len, public_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	if (sig == NULL || status != OQS_SUCCESS) {
 		return OQS_ERROR;
 	} else {
 		return OQS_SUCCESS;
 	}
+	
 }
 
 OQS_API void OQS_SIG_free(OQS_SIG *sig) {

@@ -10,6 +10,7 @@
 #endif
 
 #include <oqs/oqs.h>
+#include <stdio.h>
 
 OQS_API const char *OQS_KEM_alg_identifier(size_t i) {
 	// EDIT-WHEN-ADDING-KEM
@@ -773,26 +774,44 @@ OQS_API OQS_KEM *OQS_KEM_new(const char *method_name) {
 }
 
 OQS_API OQS_STATUS OQS_KEM_keypair(const OQS_KEM *kem, uint8_t *public_key, uint8_t *secret_key) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = kem->keypair(public_key, secret_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
-		return kem->keypair(public_key, secret_key);
+		return status;
 	}
 }
 
 OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem, uint8_t *ciphertext, uint8_t *shared_secret, const uint8_t *public_key) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = kem->encaps(ciphertext, shared_secret, public_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
-		return kem->encaps(ciphertext, shared_secret, public_key);
+		return status;
 	}
 }
 
 OQS_API OQS_STATUS OQS_KEM_decaps(const OQS_KEM *kem, uint8_t *shared_secret, const unsigned char *ciphertext, const uint8_t *secret_key) {
+	struct timespec ts_begin;
+	timespec_get(&ts_begin, TIME_UTC);
+	OQS_STATUS status = kem->decaps(shared_secret, ciphertext, secret_key);
+	struct timespec ts_end;
+    timespec_get(&ts_end, TIME_UTC);
+	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
-		return kem->decaps(shared_secret, ciphertext, secret_key);
+		return status;
 	}
 }
 
