@@ -11,7 +11,7 @@
 
 #include <oqs/oqs.h>
 #include <stdio.h>
-
+#include <time.h>
 OQS_API const char *OQS_KEM_alg_identifier(size_t i) {
 	// EDIT-WHEN-ADDING-KEM
 	const char *a[OQS_KEM_algs_length] = {
@@ -779,7 +779,7 @@ OQS_API OQS_STATUS OQS_KEM_keypair(const OQS_KEM *kem, uint8_t *public_key, uint
 	OQS_STATUS status = kem->keypair(public_key, secret_key);
 	struct timespec ts_end;
     timespec_get(&ts_end, TIME_UTC);
-	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	printf("%ld,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
@@ -793,7 +793,7 @@ OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem, uint8_t *ciphertext, uint8
 	OQS_STATUS status = kem->encaps(ciphertext, shared_secret, public_key);
 	struct timespec ts_end;
     timespec_get(&ts_end, TIME_UTC);
-	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	printf("%ld,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
@@ -807,7 +807,7 @@ OQS_API OQS_STATUS OQS_KEM_decaps(const OQS_KEM *kem, uint8_t *shared_secret, co
 	OQS_STATUS status = kem->decaps(shared_secret, ciphertext, secret_key);
 	struct timespec ts_end;
     timespec_get(&ts_end, TIME_UTC);
-	printf("%091d,", ts_end.tv_nsec-ts_begin.tv_nsec);
+	printf("%ld,", ts_end.tv_nsec-ts_begin.tv_nsec);
 	if (kem == NULL) {
 		return OQS_ERROR;
 	} else {
